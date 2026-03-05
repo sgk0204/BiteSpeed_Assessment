@@ -1,0 +1,8 @@
+node_modules/
+.env
+dist/
+coverage/
+*.sqlite
+*.sqlite-journal
+
+/generated/prisma
