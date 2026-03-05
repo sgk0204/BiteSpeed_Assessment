@@ -2,7 +2,7 @@
   "name": "bitespeed",
   "version": "1.0.0",
   "description": "BiteSpeed Backend Task: Identity Reconciliation",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
