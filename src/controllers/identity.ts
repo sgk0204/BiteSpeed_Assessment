@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Contact } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -67,13 +67,13 @@ export const identify = async (req: Request, res: Response): Promise<void> => {
         });
 
         // 3. Find the oldest primary contact in the cluster
-        const primaries = clusterContacts.filter(c => c.linkPrecedence === "primary");
-        primaries.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+        const primaries = clusterContacts.filter((c: Contact) => c.linkPrecedence === "primary");
+        primaries.sort((a: Contact, b: Contact) => a.createdAt.getTime() - b.createdAt.getTime());
         const rootPrimary = primaries[0];
 
         // If there are multiple primary contacts in the cluster, we need to merge them
         if (primaries.length > 1) {
-            const otherPrimaryIds = primaries.slice(1).map(p => p.id);
+            const otherPrimaryIds = primaries.slice(1).map((p: Contact) => p.id);
 
             // Update other primaries to be secondary and link to rootPrimary
             await prisma.contact.updateMany({
@@ -112,8 +112,8 @@ export const identify = async (req: Request, res: Response): Promise<void> => {
         // but at least one of them matched (which we know is true because matchingContacts.length > 0)
 
         // BUT we only create if something is NEW. If BOTH email and phone already exist mapped to this cluster, no new contact is needed.
-        const clusterEmails = new Set(clusterContacts.map(c => c.email).filter(Boolean));
-        const clusterPhones = new Set(clusterContacts.map(c => c.phoneNumber).filter(Boolean));
+        const clusterEmails = new Set(clusterContacts.map((c: Contact) => c.email).filter(Boolean));
+        const clusterPhones = new Set(clusterContacts.map((c: Contact) => c.phoneNumber).filter(Boolean));
 
         let createdNewContact = false;
         if (
